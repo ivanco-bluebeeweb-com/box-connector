@@ -37,11 +37,11 @@ async def box_sidebar(ctx, **kwargs) -> ui.UINode:
                       on_click=ui.Call("__panel__box_connect_help")),
             ui.Form(action="connect_box", submit_label="Подключить", children=[
                 ui.Stack(direction="v", gap=3, align="stretch", children=[
-                    _field("Название (необязательно)", ui.Input(name="label", placeholder="например, Acme Corp Box")),
-                    _field("Client ID", ui.Input(name="client_id", placeholder="из Box Developer Console > Configuration")),
-                    _field("Client Secret", ui.Password(name="client_secret", placeholder="из Box Developer Console > Configuration")),
-                    _field("Enterprise ID", ui.Input(name="enterprise_id", placeholder="из Box Developer Console или Admin Console")),
-                    _field("User ID для имперсонации (необязательно)", ui.Input(name="default_as_user_id", placeholder="оставьте пустым для Service Account")),
+                    _field("Название (необязательно)", ui.Input(param_name="label", placeholder="например, Acme Corp Box")),
+                    _field("Client ID", ui.Input(param_name="client_id", placeholder="из Box Developer Console > Configuration")),
+                    _field("Client Secret", ui.Password(param_name="client_secret", placeholder="из Box Developer Console > Configuration")),
+                    _field("Enterprise ID", ui.Input(param_name="enterprise_id", placeholder="из Box Developer Console или Admin Console")),
+                    _field("User ID для имперсонации (необязательно)", ui.Input(param_name="default_as_user_id", placeholder="оставьте пустым для Service Account")),
                 ]),
             ]),
         ])
