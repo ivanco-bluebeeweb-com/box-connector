@@ -1,0 +1,6104 @@
+{
+  "manifest_schema_version": 3,
+  "sdk_version": "5.11.0",
+  "app_id": "box-connector",
+  "version": "0.1.0",
+  "name": "Box",
+  "description": "Connect your own Box enterprise via a Custom App (Client Credentials Grant) to manage Folders, Files, Versions, Search, Collaborations, Shared Links, Comments, Tasks, Metadata Templates, and Webhooks.",
+  "icon": "icon.svg",
+  "actions_explicit": true,
+  "system": false,
+  "capabilities": [
+    "box:read",
+    "box:write"
+  ],
+  "tools": [
+    {
+      "name": "connect_box",
+      "description": "Connect your own Box enterprise via a Custom App (Client Credentials Grant): Client ID, Client Secret, and Enterprise ID.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "label": {
+            "default": "",
+            "description": "Friendly enterprise label, e.g. 'Acme Corp Box'.",
+            "title": "Label",
+            "type": "string"
+          },
+          "client_id": {
+            "description": "Box Custom App Client ID, from Developer Console > Configuration.",
+            "title": "Client Id",
+            "type": "string"
+          },
+          "client_secret": {
+            "description": "Box Custom App Client Secret, from Developer Console > Configuration.",
+            "title": "Client Secret",
+            "type": "string"
+          },
+          "enterprise_id": {
+            "description": "Box Enterprise ID, from Developer Console or Admin Console.",
+            "title": "Enterprise Id",
+            "type": "string"
+          },
+          "default_as_user_id": {
+            "default": "",
+            "description": "Optional: Box user ID to impersonate by default (requires admin-authorized as-user scope). Leave blank to act as the enterprise Service Account.",
+            "title": "Default As User Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "client_id",
+          "client_secret",
+          "enterprise_id"
+        ],
+        "title": "ConnectBoxParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "connection_id": {
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "enterprise_id": {
+            "title": "Enterprise Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "connection_id",
+          "label",
+          "enterprise_id"
+        ],
+        "title": "BoxConnection",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.connect_box",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "disconnect_box",
+      "description": "Disconnect a Box enterprise: deletes the saved Custom App credentials. Nothing in Box itself is changed.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "description": "Saved Box enterprise connection ID to remove from Imperal.",
+            "title": "Connection Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "connection_id"
+        ],
+        "title": "DisconnectBoxParams",
+        "type": "object"
+      },
+      "return_schema": {},
+      "event": "box-connector.disconnect_box",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "list_connections",
+      "description": "List the connected Box enterprises.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {},
+        "title": "NoParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "BoxConnection": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "connection_id": {
+                "title": "Connection Id",
+                "type": "string"
+              },
+              "label": {
+                "title": "Label",
+                "type": "string"
+              },
+              "enterprise_id": {
+                "title": "Enterprise Id",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "connection_id",
+              "label",
+              "enterprise_id"
+            ],
+            "title": "BoxConnection",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "connections": {
+            "items": {
+              "$ref": "#/$defs/BoxConnection"
+            },
+            "title": "Connections",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "connections"
+        ],
+        "title": "ConnectionList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "list_collaborations",
+      "description": "List collaborators (permissions) on a folder or file.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "item_id": {
+            "description": "Box folder or file ID.",
+            "title": "Item Id",
+            "type": "string"
+          },
+          "item_type": {
+            "default": "file",
+            "description": "Item type: 'file' or 'folder'.",
+            "title": "Item Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "item_id"
+        ],
+        "title": "ItemRefParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "BoxCollaboration": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "default": "",
+                "title": "Status",
+                "type": "string"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "collaboration_id": {
+                "title": "Collaboration Id",
+                "type": "string"
+              },
+              "role": {
+                "title": "Role",
+                "type": "string"
+              },
+              "accessible_by_name": {
+                "default": "",
+                "title": "Accessible By Name",
+                "type": "string"
+              },
+              "accessible_by_type": {
+                "default": "",
+                "title": "Accessible By Type",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "collaboration_id",
+              "role"
+            ],
+            "title": "BoxCollaboration",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "collaborations": {
+            "items": {
+              "$ref": "#/$defs/BoxCollaboration"
+            },
+            "title": "Collaborations",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "collaborations"
+        ],
+        "title": "CollaborationList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.list_collaborations",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "create_collaboration",
+      "description": "Grant a user or group access (a role: viewer, editor, co-owner, etc.) to a folder or file.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "item_id": {
+            "description": "Box folder or file ID to grant access to.",
+            "title": "Item Id",
+            "type": "string"
+          },
+          "item_type": {
+            "default": "folder",
+            "description": "Item type: 'file' or 'folder'.",
+            "title": "Item Type",
+            "type": "string"
+          },
+          "grantee_login": {
+            "default": "",
+            "description": "Email address of the person to invite, e.g. 'jane@example.com'. Provide either grantee_login or grantee_id.",
+            "title": "Grantee Login",
+            "type": "string"
+          },
+          "grantee_id": {
+            "default": "",
+            "description": "Box user or group ID to invite. Provide either grantee_login or grantee_id.",
+            "title": "Grantee Id",
+            "type": "string"
+          },
+          "grantee_type": {
+            "default": "user",
+            "description": "Grantee type: 'user' or 'group'.",
+            "title": "Grantee Type",
+            "type": "string"
+          },
+          "role": {
+            "default": "viewer",
+            "description": "Collaboration role: 'editor', 'viewer', 'previewer', 'uploader', 'viewer uploader', 'co-owner'.",
+            "title": "Role",
+            "type": "string"
+          }
+        },
+        "required": [
+          "item_id"
+        ],
+        "title": "CreateCollaborationParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "default": "",
+            "title": "Status",
+            "type": "string"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "collaboration_id": {
+            "title": "Collaboration Id",
+            "type": "string"
+          },
+          "role": {
+            "title": "Role",
+            "type": "string"
+          },
+          "accessible_by_name": {
+            "default": "",
+            "title": "Accessible By Name",
+            "type": "string"
+          },
+          "accessible_by_type": {
+            "default": "",
+            "title": "Accessible By Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "collaboration_id",
+          "role"
+        ],
+        "title": "BoxCollaboration",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.create_collaboration",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "update_collaboration",
+      "description": "Change an existing collaborator's role.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "collaboration_id": {
+            "description": "Collaboration ID, from list_collaborations.",
+            "title": "Collaboration Id",
+            "type": "string"
+          },
+          "role": {
+            "description": "New collaboration role.",
+            "title": "Role",
+            "type": "string"
+          }
+        },
+        "required": [
+          "collaboration_id",
+          "role"
+        ],
+        "title": "UpdateCollaborationParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "default": "",
+            "title": "Status",
+            "type": "string"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "collaboration_id": {
+            "title": "Collaboration Id",
+            "type": "string"
+          },
+          "role": {
+            "title": "Role",
+            "type": "string"
+          },
+          "accessible_by_name": {
+            "default": "",
+            "title": "Accessible By Name",
+            "type": "string"
+          },
+          "accessible_by_type": {
+            "default": "",
+            "title": "Accessible By Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "collaboration_id",
+          "role"
+        ],
+        "title": "BoxCollaboration",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.update_collaboration",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "remove_collaboration",
+      "description": "Revoke a collaborator's access to a folder or file.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "collaboration_id": {
+            "description": "Collaboration ID to revoke, from list_collaborations.",
+            "title": "Collaboration Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "collaboration_id"
+        ],
+        "title": "RemoveCollaborationParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "deleted": {
+            "title": "Deleted",
+            "type": "boolean"
+          },
+          "item_id": {
+            "default": "",
+            "title": "Item Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "deleted"
+        ],
+        "title": "DeleteResult",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.remove_collaboration",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "create_shared_link",
+      "description": "Create or update a shared link on a file or folder.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "item_id": {
+            "description": "Box folder or file ID to create a shared link on.",
+            "title": "Item Id",
+            "type": "string"
+          },
+          "item_type": {
+            "default": "file",
+            "description": "Item type: 'file' or 'folder'.",
+            "title": "Item Type",
+            "type": "string"
+          },
+          "access": {
+            "default": "company",
+            "description": "Shared link access level: 'open' (anyone with the link), 'company' (enterprise only), or 'collaborators' (invited people only).",
+            "title": "Access",
+            "type": "string"
+          },
+          "can_download": {
+            "default": true,
+            "description": "Whether people with the link can download the file.",
+            "title": "Can Download",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "item_id"
+        ],
+        "title": "CreateSharedLinkParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "default": "",
+            "title": "Url",
+            "type": "string"
+          },
+          "access": {
+            "default": "",
+            "title": "Access",
+            "type": "string"
+          },
+          "download_url": {
+            "default": "",
+            "title": "Download Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "BoxSharedLink",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.create_shared_link",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "get_shared_link",
+      "description": "Read a file or folder's current shared link, if any.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "item_id": {
+            "description": "Box folder or file ID.",
+            "title": "Item Id",
+            "type": "string"
+          },
+          "item_type": {
+            "default": "file",
+            "description": "Item type: 'file' or 'folder'.",
+            "title": "Item Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "item_id"
+        ],
+        "title": "GetSharedLinkParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "default": "",
+            "title": "Url",
+            "type": "string"
+          },
+          "access": {
+            "default": "",
+            "title": "Access",
+            "type": "string"
+          },
+          "download_url": {
+            "default": "",
+            "title": "Download Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "BoxSharedLink",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.get_shared_link",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "clear_shared_link",
+      "description": "Remove the shared link from a file or folder.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "item_id": {
+            "description": "Box folder or file ID.",
+            "title": "Item Id",
+            "type": "string"
+          },
+          "item_type": {
+            "default": "file",
+            "description": "Item type: 'file' or 'folder'.",
+            "title": "Item Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "item_id"
+        ],
+        "title": "ClearSharedLinkParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "deleted": {
+            "title": "Deleted",
+            "type": "boolean"
+          },
+          "item_id": {
+            "default": "",
+            "title": "Item Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "deleted"
+        ],
+        "title": "DeleteResult",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.clear_shared_link",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "list_comments",
+      "description": "List comments on a file.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "file_id": {
+            "description": "Box file ID, from list_folder_items or search_files.",
+            "title": "File Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file_id"
+        ],
+        "title": "FileIdParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "BoxComment": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "comment_id": {
+                "title": "Comment Id",
+                "type": "string"
+              },
+              "message": {
+                "title": "Message",
+                "type": "string"
+              },
+              "created_by": {
+                "default": "",
+                "title": "Created By",
+                "type": "string"
+              },
+              "created_at": {
+                "default": "",
+                "title": "Created At",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "comment_id",
+              "message"
+            ],
+            "title": "BoxComment",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "comments": {
+            "items": {
+              "$ref": "#/$defs/BoxComment"
+            },
+            "title": "Comments",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "comments"
+        ],
+        "title": "CommentList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.list_comments",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "add_comment",
+      "description": "Add a comment to a file.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "file_id": {
+            "description": "Box file ID, from list_folder_items or search_files.",
+            "title": "File Id",
+            "type": "string"
+          },
+          "message": {
+            "description": "Comment text.",
+            "title": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file_id",
+          "message"
+        ],
+        "title": "AddCommentParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "comment_id": {
+            "title": "Comment Id",
+            "type": "string"
+          },
+          "message": {
+            "title": "Message",
+            "type": "string"
+          },
+          "created_by": {
+            "default": "",
+            "title": "Created By",
+            "type": "string"
+          },
+          "created_at": {
+            "default": "",
+            "title": "Created At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "comment_id",
+          "message"
+        ],
+        "title": "BoxComment",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.add_comment",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "delete_comment",
+      "description": "Permanently delete a comment.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "comment_id": {
+            "description": "Comment ID to delete, from list_comments.",
+            "title": "Comment Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "comment_id"
+        ],
+        "title": "DeleteCommentParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "deleted": {
+            "title": "Deleted",
+            "type": "boolean"
+          },
+          "item_id": {
+            "default": "",
+            "title": "Item Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "deleted"
+        ],
+        "title": "DeleteResult",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.delete_comment",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "create_task",
+      "description": "Create a review/approval task on a file.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "file_id": {
+            "description": "Box file ID, from list_folder_items or search_files.",
+            "title": "File Id",
+            "type": "string"
+          },
+          "action": {
+            "default": "review",
+            "description": "Task action: 'review' or 'complete'.",
+            "title": "Action",
+            "type": "string"
+          },
+          "message": {
+            "default": "",
+            "description": "Instructions for the assignee(s).",
+            "title": "Message",
+            "type": "string"
+          },
+          "due_at": {
+            "default": "",
+            "description": "Due date/time (ISO 8601), optional.",
+            "title": "Due At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file_id"
+        ],
+        "title": "CreateTaskParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "default": "unassigned",
+            "title": "Status",
+            "type": "string"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "task_id": {
+            "title": "Task Id",
+            "type": "string"
+          },
+          "action": {
+            "title": "Action",
+            "type": "string"
+          },
+          "message": {
+            "default": "",
+            "title": "Message",
+            "type": "string"
+          },
+          "due_at": {
+            "default": "",
+            "title": "Due At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "task_id",
+          "action"
+        ],
+        "title": "BoxTask",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.create_task",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "assign_task",
+      "description": "Assign a Box task to a user by login (email) or user id.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "task_id": {
+            "description": "Task ID to assign, from create_task or list_tasks.",
+            "title": "Task Id",
+            "type": "string"
+          },
+          "assignee_login": {
+            "default": "",
+            "description": "Email address of the assignee. Provide either assignee_login or assignee_id.",
+            "title": "Assignee Login",
+            "type": "string"
+          },
+          "assignee_id": {
+            "default": "",
+            "description": "Box user ID of the assignee. Provide either assignee_login or assignee_id.",
+            "title": "Assignee Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_id"
+        ],
+        "title": "AssignTaskParams",
+        "type": "object"
+      },
+      "return_schema": {},
+      "event": "box-connector.assign_task",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "list_tasks",
+      "description": "List tasks on a file.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "file_id": {
+            "description": "Box file ID, from list_folder_items or search_files.",
+            "title": "File Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file_id"
+        ],
+        "title": "FileIdParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "BoxTask": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "default": "unassigned",
+                "title": "Status",
+                "type": "string"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "task_id": {
+                "title": "Task Id",
+                "type": "string"
+              },
+              "action": {
+                "title": "Action",
+                "type": "string"
+              },
+              "message": {
+                "default": "",
+                "title": "Message",
+                "type": "string"
+              },
+              "due_at": {
+                "default": "",
+                "title": "Due At",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "task_id",
+              "action"
+            ],
+            "title": "BoxTask",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "tasks": {
+            "items": {
+              "$ref": "#/$defs/BoxTask"
+            },
+            "title": "Tasks",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "tasks"
+        ],
+        "title": "TaskList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.list_tasks",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "delete_task",
+      "description": "Permanently delete a task.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "task_id": {
+            "description": "Task ID to delete, from list_tasks.",
+            "title": "Task Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_id"
+        ],
+        "title": "DeleteTaskParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "deleted": {
+            "title": "Deleted",
+            "type": "boolean"
+          },
+          "item_id": {
+            "default": "",
+            "title": "Item Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "deleted"
+        ],
+        "title": "DeleteResult",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.delete_task",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "list_folder_items",
+      "description": "List files and subfolders inside a Box folder.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "folder_id": {
+            "default": "0",
+            "description": "Box folder ID. Use '0' for the root folder.",
+            "title": "Folder Id",
+            "type": "string"
+          },
+          "limit": {
+            "default": 100,
+            "description": "Max items to return (1-1000).",
+            "title": "Limit",
+            "type": "integer"
+          }
+        },
+        "title": "ListFolderItemsParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "FolderItem": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "item_id": {
+                "title": "Item Id",
+                "type": "string"
+              },
+              "name": {
+                "title": "Name",
+                "type": "string"
+              },
+              "item_type": {
+                "title": "Item Type",
+                "type": "string"
+              },
+              "size_bytes": {
+                "default": 0,
+                "title": "Size Bytes",
+                "type": "integer"
+              },
+              "modified_at": {
+                "default": "",
+                "title": "Modified At",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "item_id",
+              "name",
+              "item_type"
+            ],
+            "title": "FolderItem",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/$defs/FolderItem"
+            },
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "items"
+        ],
+        "title": "FolderItemList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.list_folder_items",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "get_file",
+      "description": "Read one Box file's metadata in full.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "file_id": {
+            "description": "Box file ID, from list_folder_items or search_files.",
+            "title": "File Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file_id"
+        ],
+        "title": "FileIdParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "file_id": {
+            "title": "File Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "size_bytes": {
+            "default": 0,
+            "title": "Size Bytes",
+            "type": "integer"
+          },
+          "extension": {
+            "default": "",
+            "title": "Extension",
+            "type": "string"
+          },
+          "modified_at": {
+            "default": "",
+            "title": "Modified At",
+            "type": "string"
+          },
+          "modified_by": {
+            "default": "",
+            "title": "Modified By",
+            "type": "string"
+          },
+          "shared_link": {
+            "default": "",
+            "title": "Shared Link",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "file_id",
+          "name"
+        ],
+        "title": "BoxFile",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.get_file",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "download_file",
+      "description": "Download a file's content, base64-encoded.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "file_id": {
+            "description": "Box file ID, from list_folder_items or search_files.",
+            "title": "File Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file_id"
+        ],
+        "title": "DownloadFileParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "content_base64": {
+            "title": "Content Base64",
+            "type": "string"
+          },
+          "content_type": {
+            "default": "application/octet-stream",
+            "title": "Content Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "name",
+          "content_base64"
+        ],
+        "title": "DownloadResult",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.download_file",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "upload_file",
+      "description": "Upload a new file (base64-encoded content) into a folder.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "folder_id": {
+            "default": "0",
+            "description": "Folder ID to upload into. Use '0' for root.",
+            "title": "Folder Id",
+            "type": "string"
+          },
+          "name": {
+            "description": "File name to save as, e.g. 'contract.pdf'.",
+            "title": "Name",
+            "type": "string"
+          },
+          "content_base64": {
+            "description": "Base64-encoded file content.",
+            "title": "Content Base64",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "content_base64"
+        ],
+        "title": "UploadFileParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "file_id": {
+            "title": "File Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "file_id",
+          "name"
+        ],
+        "title": "UploadResult",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.upload_file",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "update_file",
+      "description": "Rename a file and/or move it to a different folder.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "file_id": {
+            "description": "Box file ID, from list_folder_items or search_files.",
+            "title": "File Id",
+            "type": "string"
+          },
+          "name": {
+            "default": "",
+            "description": "New file name. Leave blank to keep the current name.",
+            "title": "Name",
+            "type": "string"
+          },
+          "new_parent_folder_id": {
+            "default": "",
+            "description": "Destination parent folder ID to move into. Leave blank to keep in place.",
+            "title": "New Parent Folder Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file_id"
+        ],
+        "title": "UpdateFileParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "file_id": {
+            "title": "File Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "size_bytes": {
+            "default": 0,
+            "title": "Size Bytes",
+            "type": "integer"
+          },
+          "extension": {
+            "default": "",
+            "title": "Extension",
+            "type": "string"
+          },
+          "modified_at": {
+            "default": "",
+            "title": "Modified At",
+            "type": "string"
+          },
+          "modified_by": {
+            "default": "",
+            "title": "Modified By",
+            "type": "string"
+          },
+          "shared_link": {
+            "default": "",
+            "title": "Shared Link",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "file_id",
+          "name"
+        ],
+        "title": "BoxFile",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.update_file",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "copy_file",
+      "description": "Copy a file into a (possibly different) folder.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "file_id": {
+            "description": "Box file ID, from list_folder_items or search_files.",
+            "title": "File Id",
+            "type": "string"
+          },
+          "target_folder_id": {
+            "description": "Destination folder ID to copy into.",
+            "title": "Target Folder Id",
+            "type": "string"
+          },
+          "new_name": {
+            "default": "",
+            "description": "Optional new name for the copy. Leave blank to keep the current name.",
+            "title": "New Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file_id",
+          "target_folder_id"
+        ],
+        "title": "CopyFileParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "file_id": {
+            "title": "File Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "size_bytes": {
+            "default": 0,
+            "title": "Size Bytes",
+            "type": "integer"
+          },
+          "extension": {
+            "default": "",
+            "title": "Extension",
+            "type": "string"
+          },
+          "modified_at": {
+            "default": "",
+            "title": "Modified At",
+            "type": "string"
+          },
+          "modified_by": {
+            "default": "",
+            "title": "Modified By",
+            "type": "string"
+          },
+          "shared_link": {
+            "default": "",
+            "title": "Shared Link",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "file_id",
+          "name"
+        ],
+        "title": "BoxFile",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.copy_file",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "delete_file",
+      "description": "Permanently delete a file. Box keeps it recoverable in Trash for a limited retention window; this cannot be undone through this connector.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "file_id": {
+            "description": "Box file ID, from list_folder_items or search_files.",
+            "title": "File Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file_id"
+        ],
+        "title": "DeleteFileParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "deleted": {
+            "title": "Deleted",
+            "type": "boolean"
+          },
+          "item_id": {
+            "default": "",
+            "title": "Item Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "deleted"
+        ],
+        "title": "DeleteResult",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.delete_file",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "search_files",
+      "description": "Search files and folders across the connected Box enterprise by free-text query.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "query": {
+            "description": "Free-text search query, e.g. 'quarterly report'.",
+            "title": "Query",
+            "type": "string"
+          },
+          "limit": {
+            "default": 30,
+            "description": "Max results to return (1-200).",
+            "title": "Limit",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "title": "SearchFilesParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "FolderItem": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "item_id": {
+                "title": "Item Id",
+                "type": "string"
+              },
+              "name": {
+                "title": "Name",
+                "type": "string"
+              },
+              "item_type": {
+                "title": "Item Type",
+                "type": "string"
+              },
+              "size_bytes": {
+                "default": 0,
+                "title": "Size Bytes",
+                "type": "integer"
+              },
+              "modified_at": {
+                "default": "",
+                "title": "Modified At",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "item_id",
+              "name",
+              "item_type"
+            ],
+            "title": "FolderItem",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/$defs/FolderItem"
+            },
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "items"
+        ],
+        "title": "FolderItemList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.search_files",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "get_folder",
+      "description": "Read one Box folder's metadata in full, including item count and owner.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "folder_id": {
+            "default": "0",
+            "description": "Box folder ID. Use '0' for the root folder.",
+            "title": "Folder Id",
+            "type": "string"
+          }
+        },
+        "title": "FolderIdParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "folder_id": {
+            "title": "Folder Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "parent_id": {
+            "default": "",
+            "title": "Parent Id",
+            "type": "string"
+          },
+          "item_count": {
+            "default": 0,
+            "title": "Item Count",
+            "type": "integer"
+          },
+          "modified_at": {
+            "default": "",
+            "title": "Modified At",
+            "type": "string"
+          },
+          "owned_by": {
+            "default": "",
+            "title": "Owned By",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "folder_id",
+          "name"
+        ],
+        "title": "BoxFolder",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.get_folder",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "create_folder",
+      "description": "Create a new folder inside a parent folder.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "name": {
+            "description": "New folder name, e.g. 'Q3 Contracts'.",
+            "title": "Name",
+            "type": "string"
+          },
+          "parent_folder_id": {
+            "default": "0",
+            "description": "Parent folder ID to create the new folder inside. Use '0' for root.",
+            "title": "Parent Folder Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "CreateFolderParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "folder_id": {
+            "title": "Folder Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "parent_id": {
+            "default": "",
+            "title": "Parent Id",
+            "type": "string"
+          },
+          "item_count": {
+            "default": 0,
+            "title": "Item Count",
+            "type": "integer"
+          },
+          "modified_at": {
+            "default": "",
+            "title": "Modified At",
+            "type": "string"
+          },
+          "owned_by": {
+            "default": "",
+            "title": "Owned By",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "folder_id",
+          "name"
+        ],
+        "title": "BoxFolder",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.create_folder",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "rename_or_move_folder",
+      "description": "Rename a folder and/or move it to a different parent folder.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "folder_id": {
+            "default": "0",
+            "description": "Box folder ID. Use '0' for the root folder.",
+            "title": "Folder Id",
+            "type": "string"
+          },
+          "name": {
+            "default": "",
+            "description": "New folder name. Leave blank to keep the current name.",
+            "title": "Name",
+            "type": "string"
+          },
+          "new_parent_folder_id": {
+            "default": "",
+            "description": "Destination parent folder ID to move into. Leave blank to keep in place.",
+            "title": "New Parent Folder Id",
+            "type": "string"
+          }
+        },
+        "title": "RenameOrMoveFolderParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "folder_id": {
+            "title": "Folder Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "parent_id": {
+            "default": "",
+            "title": "Parent Id",
+            "type": "string"
+          },
+          "item_count": {
+            "default": 0,
+            "title": "Item Count",
+            "type": "integer"
+          },
+          "modified_at": {
+            "default": "",
+            "title": "Modified At",
+            "type": "string"
+          },
+          "owned_by": {
+            "default": "",
+            "title": "Owned By",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "folder_id",
+          "name"
+        ],
+        "title": "BoxFolder",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.rename_or_move_folder",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "delete_folder",
+      "description": "Permanently delete a folder. Box keeps it recoverable in Trash for a limited retention window; this cannot be undone through this connector.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "folder_id": {
+            "default": "0",
+            "description": "Box folder ID. Use '0' for the root folder.",
+            "title": "Folder Id",
+            "type": "string"
+          },
+          "recursive": {
+            "default": false,
+            "description": "Delete even if the folder still contains items.",
+            "title": "Recursive",
+            "type": "boolean"
+          }
+        },
+        "title": "DeleteFolderParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "deleted": {
+            "title": "Deleted",
+            "type": "boolean"
+          },
+          "item_id": {
+            "default": "",
+            "title": "Item Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "deleted"
+        ],
+        "title": "DeleteResult",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.delete_folder",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "list_metadata_templates",
+      "description": "List metadata templates defined on the connected enterprise.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          }
+        },
+        "title": "ConnectionRefParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "MetadataTemplate": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "template_key": {
+                "title": "Template Key",
+                "type": "string"
+              },
+              "display_name": {
+                "title": "Display Name",
+                "type": "string"
+              },
+              "scope": {
+                "title": "Scope",
+                "type": "string"
+              },
+              "field_count": {
+                "default": 0,
+                "title": "Field Count",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "template_key",
+              "display_name",
+              "scope"
+            ],
+            "title": "MetadataTemplate",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "templates": {
+            "items": {
+              "$ref": "#/$defs/MetadataTemplate"
+            },
+            "title": "Templates",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "templates"
+        ],
+        "title": "MetadataTemplateList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.list_metadata_templates",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "get_metadata",
+      "description": "Read the metadata instance of a given template attached to a file.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "file_id": {
+            "description": "Box file ID, from list_folder_items or search_files.",
+            "title": "File Id",
+            "type": "string"
+          },
+          "scope": {
+            "default": "enterprise",
+            "description": "Metadata scope: 'enterprise' or 'global'.",
+            "title": "Scope",
+            "type": "string"
+          },
+          "template_key": {
+            "description": "Metadata template key, from list_metadata_templates.",
+            "title": "Template Key",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file_id",
+          "template_key"
+        ],
+        "title": "GetMetadataParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "template_key": {
+            "title": "Template Key",
+            "type": "string"
+          },
+          "fields": {
+            "additionalProperties": true,
+            "default": {},
+            "title": "Fields",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "template_key"
+        ],
+        "title": "MetadataInstance",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.get_metadata",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "set_metadata",
+      "description": "Create or update a metadata instance of a given template on a file, from a JSON object of field values.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "file_id": {
+            "description": "Box file ID, from list_folder_items or search_files.",
+            "title": "File Id",
+            "type": "string"
+          },
+          "scope": {
+            "default": "enterprise",
+            "description": "Metadata scope: 'enterprise' or 'global'.",
+            "title": "Scope",
+            "type": "string"
+          },
+          "template_key": {
+            "description": "Metadata template key, from list_metadata_templates.",
+            "title": "Template Key",
+            "type": "string"
+          },
+          "fields_json": {
+            "description": "JSON object of field-name to value pairs matching the template's schema, e.g. '{\"status\": \"Approved\"}'.",
+            "title": "Fields Json",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file_id",
+          "template_key",
+          "fields_json"
+        ],
+        "title": "SetMetadataParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "template_key": {
+            "title": "Template Key",
+            "type": "string"
+          },
+          "fields": {
+            "additionalProperties": true,
+            "default": {},
+            "title": "Fields",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "template_key"
+        ],
+        "title": "MetadataInstance",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.set_metadata",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "delete_metadata",
+      "description": "Remove a metadata instance of a given template from a file.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "file_id": {
+            "description": "Box file ID, from list_folder_items or search_files.",
+            "title": "File Id",
+            "type": "string"
+          },
+          "scope": {
+            "default": "enterprise",
+            "description": "Metadata scope: 'enterprise' or 'global'.",
+            "title": "Scope",
+            "type": "string"
+          },
+          "template_key": {
+            "description": "Metadata template key, from list_metadata_templates.",
+            "title": "Template Key",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file_id",
+          "template_key"
+        ],
+        "title": "DeleteMetadataParams",
+        "type": "object"
+      },
+      "return_schema": {},
+      "event": "box-connector.delete_metadata",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "list_file_versions",
+      "description": "List the saved versions of a file.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "file_id": {
+            "description": "Box file ID, from list_folder_items or search_files.",
+            "title": "File Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file_id"
+        ],
+        "title": "FileIdParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "BoxFileVersion": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "version_id": {
+                "title": "Version Id",
+                "type": "string"
+              },
+              "size_bytes": {
+                "default": 0,
+                "title": "Size Bytes",
+                "type": "integer"
+              },
+              "modified_at": {
+                "default": "",
+                "title": "Modified At",
+                "type": "string"
+              },
+              "modified_by": {
+                "default": "",
+                "title": "Modified By",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "version_id"
+            ],
+            "title": "BoxFileVersion",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "versions": {
+            "items": {
+              "$ref": "#/$defs/BoxFileVersion"
+            },
+            "title": "Versions",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "versions"
+        ],
+        "title": "VersionList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.list_file_versions",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "promote_file_version",
+      "description": "Promote a previous file version to be the current version (Box keeps history rather than truly reverting).",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "file_id": {
+            "description": "Box file ID, from list_folder_items or search_files.",
+            "title": "File Id",
+            "type": "string"
+          },
+          "version_id": {
+            "description": "Version ID to restore as the current version, from list_file_versions.",
+            "title": "Version Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file_id",
+          "version_id"
+        ],
+        "title": "PromoteVersionParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "version_id": {
+            "title": "Version Id",
+            "type": "string"
+          },
+          "size_bytes": {
+            "default": 0,
+            "title": "Size Bytes",
+            "type": "integer"
+          },
+          "modified_at": {
+            "default": "",
+            "title": "Modified At",
+            "type": "string"
+          },
+          "modified_by": {
+            "default": "",
+            "title": "Modified By",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "version_id"
+        ],
+        "title": "BoxFileVersion",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.promote_file_version",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "delete_file_version",
+      "description": "Move a specific file version to Trash.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "file_id": {
+            "description": "Box file ID, from list_folder_items or search_files.",
+            "title": "File Id",
+            "type": "string"
+          },
+          "version_id": {
+            "description": "Version ID to move to trash, from list_file_versions.",
+            "title": "Version Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file_id",
+          "version_id"
+        ],
+        "title": "DeleteVersionParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "deleted": {
+            "title": "Deleted",
+            "type": "boolean"
+          },
+          "item_id": {
+            "default": "",
+            "title": "Item Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "deleted"
+        ],
+        "title": "DeleteResult",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.delete_file_version",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "create_webhook",
+      "description": "Subscribe to change events on a file or folder -- Box will POST to your HTTPS endpoint when those events occur.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "target_id": {
+            "description": "Folder or file ID to watch for changes.",
+            "title": "Target Id",
+            "type": "string"
+          },
+          "target_type": {
+            "default": "file",
+            "description": "Target type: 'file' or 'folder'.",
+            "title": "Target Type",
+            "type": "string"
+          },
+          "address": {
+            "description": "HTTPS URL Box should POST event notifications to.",
+            "title": "Address",
+            "type": "string"
+          },
+          "triggers": {
+            "description": "Event types to subscribe to, e.g. ['FILE.UPLOADED', 'FILE.TRASHED', 'FOLDER.CREATED'].",
+            "items": {
+              "type": "string"
+            },
+            "title": "Triggers",
+            "type": "array"
+          }
+        },
+        "required": [
+          "target_id",
+          "address"
+        ],
+        "title": "CreateWebhookParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "webhook_id": {
+            "title": "Webhook Id",
+            "type": "string"
+          },
+          "target_type": {
+            "title": "Target Type",
+            "type": "string"
+          },
+          "target_id": {
+            "title": "Target Id",
+            "type": "string"
+          },
+          "address": {
+            "title": "Address",
+            "type": "string"
+          },
+          "triggers": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Triggers",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "webhook_id",
+          "target_type",
+          "target_id",
+          "address"
+        ],
+        "title": "BoxWebhook",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.create_webhook",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "list_webhooks",
+      "description": "List active change-event webhooks configured on the connected enterprise.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          }
+        },
+        "title": "ConnectionRefParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "BoxWebhook": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "webhook_id": {
+                "title": "Webhook Id",
+                "type": "string"
+              },
+              "target_type": {
+                "title": "Target Type",
+                "type": "string"
+              },
+              "target_id": {
+                "title": "Target Id",
+                "type": "string"
+              },
+              "address": {
+                "title": "Address",
+                "type": "string"
+              },
+              "triggers": {
+                "default": [],
+                "items": {
+                  "type": "string"
+                },
+                "title": "Triggers",
+                "type": "array"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "webhook_id",
+              "target_type",
+              "target_id",
+              "address"
+            ],
+            "title": "BoxWebhook",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "webhooks": {
+            "items": {
+              "$ref": "#/$defs/BoxWebhook"
+            },
+            "title": "Webhooks",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "webhooks"
+        ],
+        "title": "WebhookList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.list_webhooks",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "delete_webhook",
+      "description": "Permanently delete a webhook subscription. Cannot be undone.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "webhook_id": {
+            "description": "Webhook ID, from list_webhooks.",
+            "title": "Webhook Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "webhook_id"
+        ],
+        "title": "WebhookIdParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "deleted": {
+            "title": "Deleted",
+            "type": "boolean"
+          },
+          "item_id": {
+            "default": "",
+            "title": "Item Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "deleted"
+        ],
+        "title": "DeleteResult",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.delete_webhook",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    },
+    {
+      "name": "audit_content_health",
+      "description": "Scan a folder for content-health issues: shared links on files that have not been modified recently, empty (0-byte) files, and webhooks with no event triggers configured.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Box enterprise connection ID. Omit to use the first connected enterprise.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "folder_id": {
+            "default": "0",
+            "description": "Folder ID to audit. Use '0' for root.",
+            "title": "Folder Id",
+            "type": "string"
+          },
+          "stale_link_days": {
+            "default": 90,
+            "description": "Flag shared links older than this many days as potentially stale.",
+            "title": "Stale Link Days",
+            "type": "integer"
+          }
+        },
+        "title": "AuditContentParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "ContentAuditFinding": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "finding_type": {
+                "title": "Finding Type",
+                "type": "string"
+              },
+              "item_name": {
+                "title": "Item Name",
+                "type": "string"
+              },
+              "detail": {
+                "title": "Detail",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "finding_type",
+              "item_name",
+              "detail"
+            ],
+            "title": "ContentAuditFinding",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "findings": {
+            "items": {
+              "$ref": "#/$defs/ContentAuditFinding"
+            },
+            "title": "Findings",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "findings"
+        ],
+        "title": "ContentAudit",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "box-connector.audit_content_health",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "box"
+    }
+  ],
+  "signals": [],
+  "schedules": [],
+  "required_scopes": [],
+  "icon_size_bytes": 299,
+  "lifecycle": {
+    "health_check": {
+      "interval_sec": 60
+    }
+  },
+  "secrets": [
+    {
+      "name": "box_connections",
+      "description": "JSON list of connected Box enterprises and encrypted Custom App (Client Credentials Grant) credentials. Managed only through connect_box and disconnect_box.",
+      "required": true,
+      "write_mode": "both",
+      "max_bytes": 65536,
+      "scope": "user",
+      "rotation_hint_days": 90
+    }
+  ],
+  "panels": [
+    {
+      "panel_id": "secrets",
+      "slot": "right",
+      "title": "Secrets",
+      "tree": {},
+      "icon": "KeyRound",
+      "refresh": "manual",
+      "center_overlay": false
+    },
+    {
+      "panel_id": "box_sidebar",
+      "slot": "left",
+      "title": "Box",
+      "tree": {},
+      "icon": "",
+      "refresh": "manual",
+      "center_overlay": false
+    },
+    {
+      "panel_id": "box_connect_help",
+      "slot": "overlay",
+      "title": "Как подключить Box",
+      "tree": {},
+      "icon": "",
+      "refresh": "manual",
+      "center_overlay": false
+    },
+    {
+      "panel_id": "box_folders",
+      "slot": "center",
+      "title": "Folders",
+      "tree": {},
+      "icon": "",
+      "refresh": "manual",
+      "center_overlay": true
+    },
+    {
+      "panel_id": "box_audit",
+      "slot": "center",
+      "title": "Content audit",
+      "tree": {},
+      "icon": "",
+      "refresh": "manual",
+      "center_overlay": true
+    },
+    {
+      "panel_id": "box_settings",
+      "slot": "center",
+      "title": "Box settings",
+      "tree": {},
+      "icon": "Settings",
+      "refresh": "manual",
+      "center_overlay": true
+    }
+  ]
+}
