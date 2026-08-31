@@ -183,21 +183,29 @@ class AuditContentParams(ConnectionRefParams):
 # ---- SDL result entities ----
 
 class DeleteResult(sdl.Entity):
+    id: str = ""
+    title: str = ""
     deleted: bool
     item_id: str = ""
 
 
 class BoxConnection(sdl.Entity):
+    id: str = ""
+    title: str = ""
     connection_id: str
     label: str
     enterprise_id: str
 
 
 class ConnectionList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     connections: list[BoxConnection]
 
 
 class BoxFolder(sdl.Entity):
+    id: str = ""
+    title: str = ""
     folder_id: str
     name: str
     parent_id: str = ""
@@ -207,6 +215,8 @@ class BoxFolder(sdl.Entity):
 
 
 class BoxFile(sdl.Entity):
+    id: str = ""
+    title: str = ""
     file_id: str
     name: str
     size_bytes: int = 0
@@ -217,6 +227,8 @@ class BoxFile(sdl.Entity):
 
 
 class FolderItem(sdl.Entity):
+    id: str = ""
+    title: str = ""
     item_id: str
     name: str
     item_type: str
@@ -225,21 +237,29 @@ class FolderItem(sdl.Entity):
 
 
 class FolderItemList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     items: list[FolderItem]
 
 
 class DownloadResult(sdl.Entity):
+    id: str = ""
+    title: str = ""
     name: str
     content_base64: str
     content_type: str = "application/octet-stream"
 
 
 class UploadResult(sdl.Entity):
+    id: str = ""
+    title: str = ""
     file_id: str
     name: str
 
 
 class BoxFileVersion(sdl.Entity):
+    id: str = ""
+    title: str = ""
     version_id: str
     size_bytes: int = 0
     modified_at: str = ""
@@ -247,10 +267,14 @@ class BoxFileVersion(sdl.Entity):
 
 
 class VersionList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     versions: list[BoxFileVersion]
 
 
 class BoxCollaboration(sdl.Entity):
+    id: str = ""
+    title: str = ""
     collaboration_id: str
     role: str
     status: str = ""
@@ -259,16 +283,22 @@ class BoxCollaboration(sdl.Entity):
 
 
 class CollaborationList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     collaborations: list[BoxCollaboration]
 
 
 class BoxSharedLink(sdl.Entity):
+    id: str = ""
+    title: str = ""
     url: str = ""
     access: str = ""
     download_url: str = ""
 
 
 class BoxComment(sdl.Entity):
+    id: str = ""
+    title: str = ""
     comment_id: str
     message: str
     created_by: str = ""
@@ -276,10 +306,14 @@ class BoxComment(sdl.Entity):
 
 
 class CommentList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     comments: list[BoxComment]
 
 
 class BoxTask(sdl.Entity):
+    id: str = ""
+    title: str = ""
     task_id: str
     action: str
     message: str = ""
@@ -288,10 +322,14 @@ class BoxTask(sdl.Entity):
 
 
 class TaskList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     tasks: list[BoxTask]
 
 
 class MetadataTemplate(sdl.Entity):
+    id: str = ""
+    title: str = ""
     template_key: str
     display_name: str
     scope: str
@@ -299,15 +337,21 @@ class MetadataTemplate(sdl.Entity):
 
 
 class MetadataTemplateList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     templates: list[MetadataTemplate]
 
 
 class MetadataInstance(sdl.Entity):
+    id: str = ""
+    title: str = ""
     template_key: str
     fields: dict = {}
 
 
 class BoxWebhook(sdl.Entity):
+    id: str = ""
+    title: str = ""
     webhook_id: str
     target_type: str
     target_id: str
@@ -316,14 +360,20 @@ class BoxWebhook(sdl.Entity):
 
 
 class WebhookList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     webhooks: list[BoxWebhook]
 
 
 class ContentAuditFinding(sdl.Entity):
+    id: str = ""
+    title: str = ""
     finding_type: str
     item_name: str
     detail: str
 
 
 class ContentAudit(sdl.Entity):
+    id: str = ""
+    title: str = ""
     findings: list[ContentAuditFinding]
