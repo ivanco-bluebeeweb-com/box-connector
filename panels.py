@@ -23,8 +23,7 @@ def _field(label: str, node: ui.UINode) -> ui.UINode:
 
 def _settings_button() -> ui.UINode:
     return ui.Button(
-        "App settings", variant="secondary", size="sm", full_width=True,
-        icon="Settings", on_click=ui.Call("__panel__box_settings"),
+        "App settings", variant="secondary", size="sm", icon="Settings", on_click=ui.Call("__panel__box_settings"),
     )
 
 
@@ -35,7 +34,7 @@ async def box_sidebar(ctx, **kwargs) -> ui.UINode:
         return ui.Stack(direction="v", gap=3, align="stretch", children=[
             ui.Button("Как подключить?", variant="ghost", size="sm", icon="HelpCircle",
                       on_click=ui.Call("__panel__box_connect_help")),
-            ui.Button("Authorize Box Enterprise (OAuth 2.0)", variant="primary", size="sm", full_width=True, icon="login"),
+            ui.Button("Authorize Box Enterprise (OAuth 2.0)", variant="primary", size="sm", icon="login"),
             ui.Divider(),
             ui.Text("Or connect via Custom App Client Credentials", variant="caption"),
             ui.Form(action="connect_box", submit_label="Подключить", children=[
@@ -54,9 +53,9 @@ async def box_sidebar(ctx, **kwargs) -> ui.UINode:
             ui.Text(c.get("label") or c.get("enterprise_id", ""), variant="body"),
             ui.Text(f"Enterprise ID: {c.get('enterprise_id', '')}", variant="caption"),
         ]),
-        ui.Button("Папки", variant="secondary", size="sm", full_width=True, icon="Folder",
+        ui.Button("Папки", variant="secondary", size="sm", icon="Folder",
                   on_click=ui.Call("__panel__box_folders")),
-        ui.Button("Аудит контента", variant="secondary", size="sm", full_width=True, icon="ShieldCheck",
+        ui.Button("Аудит контента", variant="secondary", size="sm", icon="ShieldCheck",
                   on_click=ui.Call("__panel__box_audit")),
         _settings_button(),
     ])
