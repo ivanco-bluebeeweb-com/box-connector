@@ -35,6 +35,9 @@ async def box_sidebar(ctx, **kwargs) -> ui.UINode:
         return ui.Stack(direction="v", gap=3, align="stretch", children=[
             ui.Button("Как подключить?", variant="ghost", size="sm", icon="HelpCircle",
                       on_click=ui.Call("__panel__box_connect_help")),
+            ui.Button("Authorize Box Enterprise (OAuth 2.0)", variant="primary", size="sm", full_width=True, icon="login"),
+            ui.Divider(),
+            ui.Text("Or connect via Custom App Client Credentials", variant="caption"),
             ui.Form(action="connect_box", submit_label="Подключить", children=[
                 ui.Stack(direction="v", gap=3, align="stretch", children=[
                     _field("Название (необязательно)", ui.Input(param_name="label", placeholder="например, Acme Corp Box")),
